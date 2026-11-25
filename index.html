@@ -32,10 +32,12 @@ header h1{margin:5px 0 0;font-size:22px}
 .card img{width:100%;height:150px;object-fit:cover;background:#eee}
 .card h3{font-size:14px;margin:8px 5px;min-height:35px}
 .price{color:#d00;font-weight:bold;font-size:16px}
-.wholesale{background:#111;color:#ffcc00;font-weight:900;font-size:14px;padding:5px;margin:5px 10px;border-radius:8px;display:none}
+.wholesale{background:#111;color:#ffcc00;font-weight:900;font-size:14px;padding:6px;margin:5px 10px;border-radius:8px;display:none}
 body.admin .wholesale{display:block}
-.card a{display:block;background:#25D366;color:#fff;text-decoration:none;margin:10px;padding:9px;border-radius:8px;font-size:14px;font-weight:bold}
-.admin-btn{display:block;text-align:center;margin:5px auto;color:#888;font-size:12px;background:none;border:none;cursor:pointer}
+.admin-wrap{padding:10px 12px 5px}
+.admin-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#111;color:#fff;border:2px solid #ffcc00;padding:16px;border-radius:15px;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 4px 15px rgba(0,0,0,.3)}
+.admin-btn span{font-size:26px}
+body.admin .admin-btn{background:#ffcc00;color:#111}
 footer{text-align:center;padding:15px;color:#888;font-size:13px}
 </style>
 </head>
@@ -62,23 +64,35 @@ footer{text-align:center;padding:15px;color:#888;font-size:13px}
 <a class="wa" href="https://wa.me/201093325276">💬 واتساب</a>
 </div>
 <div class="search"><input id="search" placeholder="دور على منتج... ثلاجة، خلاط، فلتر" oninput="filter()"></div>
+<div class="admin-wrap">
+<button class="admin-btn" id="adminBtn" onclick="adminLogin()"><span>⚙️</span> دخول الأدمن - إظهار سعر الجملة <span>🔒</span></button>
+</div>
 <div id="products">جاري تحميل الأصناف...</div>
-<button class="admin-btn" onclick="adminLogin()">🔒 دخول الأدمن</button>
 <footer>متجر إدريس © 2026 - قنا</footer>
 <script>
 let all=[];
 let isAdmin = localStorage.getItem('isAdmin')==='1';
-if(isAdmin) document.body.classList.add('admin');
+if(isAdmin){document.body.classList.add('admin');}
+function updateBtn(){
+let b=document.getElementById('adminBtn');
+if(document.body.classList.contains('admin')){b.innerHTML='<span>⚙️</span> وضع الأدمن شغال ✅ - اضغط للخروج <span>🔓</span>';}
+}
+updateBtn();
 function adminLogin(){
+if(document.body.classList.contains('admin')){
+localStorage.removeItem('isAdmin');
+document.body.classList.remove('admin');
+document.getElementById('adminBtn').innerHTML='<span>⚙️</span> دخول الأدمن - إظهار سعر الجملة <span>🔒</span>';
+show(all); return;
+}
 let p = prompt('اكتب كلمة سر الأدمن:');
-if(p==='0100'){
+if(p==='1234'){
 localStorage.setItem('isAdmin','1');
 document.body.classList.add('admin');
+updateBtn();
 alert('تم تفعيل وضع الأدمن ✅ سعر الجملة هيظهر ليك دلوقتي');
 show(all);
-}else{
-alert('كلمة السر غلط');
-}
+}else{alert('كلمة السر غلط');}
 }
 fetch('https://docs.google.com/spreadsheets/d/1oMmMQajIGqrRRrAwzrurB2c1FxoELQUz3VNXPpR11Yg/gviz/tq?tqx=out:json')
 .then(r=>r.text()).then(t=>{
@@ -93,7 +107,7 @@ document.getElementById('products').innerHTML=list.map(p=>`
 <img src="${p.img||'https://via.placeholder.com/300'}" onerror="this.src='https://via.placeholder.com/300'">
 <h3>${p.name}</h3>
 <div class="price">${p.price} جنيه</div>
-<div class="wholesale">سعر الجملة: ${p.wholesale} جنيه 🔒</div>
+${p.wholesale?`<div class="wholesale">سعر الجملة: ${p.wholesale} جنيه 🔒</div>`:''}
 <a href="https://wa.me/201093325276?text=${encodeURIComponent('عايز اطلب: '+p.name+' - '+p.price+' جنيه')}">اطلب واتساب</a>
 </div>`).join('')||'مفيش منتجات';
 }
