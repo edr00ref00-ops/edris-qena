@@ -34,6 +34,7 @@ header h1{margin:5px 0 0;font-size:22px}
 .price{color:#d00;font-weight:bold;font-size:16px}
 .wholesale{background:#111;color:#ffcc00;font-weight:900;font-size:14px;padding:6px;margin:5px 10px;border-radius:8px;display:none}
 body.admin .wholesale{display:block}
+.card .order-btn{display:block !important;background:#25D366 !important;color:#fff !important;text-decoration:none !important;margin:10px;padding:11px;border-radius:10px;font-size:15px;font-weight:900}
 .admin-wrap{padding:10px 12px 5px}
 .admin-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#111;color:#fff;border:2px solid #ffcc00;padding:16px;border-radius:15px;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 4px 15px rgba(0,0,0,.3)}
 .admin-btn span{font-size:26px}
@@ -108,7 +109,7 @@ document.getElementById('products').innerHTML=list.map(p=>`
 <h3>${p.name}</h3>
 <div class="price">${p.price} جنيه</div>
 ${p.wholesale?`<div class="wholesale">سعر الجملة: ${p.wholesale} جنيه 🔒</div>`:''}
-<a href="https://wa.me/201093325276?text=${encodeURIComponent('عايز اطلب: '+p.name+' - '+p.price+' جنيه')}">اطلب واتساب</a>
+<a class="order-btn" href="https://wa.me/201093325276?text=${encodeURIComponent('عايز اطلب: '+p.name+' - '+p.price+' جنيه')}">اطلب واتساب</a>
 </div>`).join('')||'مفيش منتجات';
 }
 function filter(){
